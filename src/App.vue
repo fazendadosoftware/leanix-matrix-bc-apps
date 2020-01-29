@@ -1,27 +1,41 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <header-component v-if="false"/>
+    <grid-component />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import HeaderComponent from '@/components/HeaderComponent'
+import GridComponent from '@/components/GridComponent'
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    HeaderComponent,
+    GridComponent
   }
 }
 </script>
 
 <style lang="stylus">
+body
+  margin 0
+
 #app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
+  font-family Axiforma, "Helvetica Neue", Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
-  margin-top 60px
+  font-size 12px
+
+.custom-scrollbar
+  &::-webkit-scrollbar-track
+    -webkit-box-shadow inset 0 0 6px rgba(0,0,0,0.3)
+    background-color grey-100
+  &::-webkit-scrollbar
+    width 0.5em
+    height 0.5em
+    background-color: transparent
+  &::-webkit-scrollbar-thumb
+    background-color #a9a9a9
+    outline 1px solid #708090
 </style>

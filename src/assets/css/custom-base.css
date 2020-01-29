@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'Axiforma';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Axiforma'), url('../font/AxiformaRegular.woff') format('woff');
+}
+
+.grid {
+  display: grid;
+}
