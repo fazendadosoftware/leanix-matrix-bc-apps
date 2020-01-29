@@ -32,12 +32,13 @@ export const cells = state => {
       const firstCell = { ...businessCapability, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1) }
       const row = [firstCell, ..._columns
         .map(column => {
-          const { year, quarter } = column
+          const { year, quarter = null } = column
           const computedCellValue = {
             id: `${businessCapability.id}-${year}-${quarter}`,
             isContent: true,
             businessCapabilityId: businessCapability.id,
-            year
+            year,
+            quarter
           }
           return computedCellValue
         })]

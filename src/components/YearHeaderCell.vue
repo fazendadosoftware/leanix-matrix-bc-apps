@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky top-0 border bg-green-400">{{cell.label}}</div>
+  <div class="sticky top-0 border p-1 bg-green-400">{{cell.label}}</div>
 </template>
 
 <script>
