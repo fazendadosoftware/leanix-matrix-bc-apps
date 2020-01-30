@@ -27,15 +27,15 @@ export default {
   },
   data: () => ({
     gridGapPx: 2,
-    firstColumnWidthPx: 200,
-    columnWidthPx: 200
+    firstColumnWidthPx: 130,
+    columnWidthPx: 140
   }),
   methods: {
     ...mapMutations(['setShowQuarters']),
     getComputedStyle (cell) {
       const { level, isBusinessCapabilityEmptyHeader } = cell
       if (level === 2 || isBusinessCapabilityEmptyHeader) {
-        return `position: sticky;left:${this.columnWidthPx + this.gridGapPx}px`
+        return `position: sticky;left:${this.firstColumnWidthPx + this.gridGapPx}px`
       }
       return ''
     }
@@ -48,7 +48,7 @@ export default {
     gridContainerStyle () {
       const columns = this.columns.length
       const width = `width: ${this.columnWidthPx + this.columnWidthPx * columns}px;`
-      const style = `grid-gap:${this.gridGapPx}px;grid-template-columns: ${this.firstColumnWidthPx}px ${this.bcsDrilledDown ? `${this.firstColumnWidthPx}px` : ''}  ${columns ? `repeat(${columns}, ${this.columnWidthPx}px)` : ''}; ${width}`
+      const style = `grid-gap:${this.gridGapPx}px; grid-template-columns: ${this.firstColumnWidthPx}px ${this.bcsDrilledDown ? `${this.firstColumnWidthPx}px` : ''} ${columns ? `repeat(${columns}, ${this.columnWidthPx}px)` : ''}; ${width}`
       return style
     }
   },

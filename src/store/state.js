@@ -8,12 +8,6 @@ export default {
   dataset: [],
   businessCapabilityIndex: {},
   expandedBusinessCapabilities: [],
-  applicationViewIndex: {},
-  applicationViewOptions: [],
-  applicationViewKey: undefined,
-  businessCapabilityViewIndex: {},
-  businessCapabilityViewOptions: [],
-  businessCapabilityViewKey: undefined,
 
   viewOptions: {},
   viewKey: {},
