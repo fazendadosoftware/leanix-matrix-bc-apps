@@ -15,12 +15,15 @@
       @click="fetchDataset()">
       Reload
     </button>
+    <application-view-dropdown />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
+import ApplicationViewDropdown from '@/components/ApplicationViewDropdown'
 export default {
+  components: { ApplicationViewDropdown },
   methods: {
     ...mapActions(['fetchDataset']),
     ...mapMutations(['setShowQuarters']),

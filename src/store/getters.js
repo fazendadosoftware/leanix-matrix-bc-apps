@@ -3,6 +3,9 @@ export const showQuarters = state => state.showQuarters
 export const dataset = state => state.dataset
 export const businessCapabilityIndex = state => state.businessCapabilityIndex
 export const expandedBusinessCapabilities = state => state.expandedBusinessCapabilities
+export const applicationViewIndex = state => state.applicationViewIndex
+export const applicationViewOptions = state => state.applicationViewOptions
+export const applicationViewKey = state => state.applicationViewKey
 
 export const columns = state => {
   const { yearCount, startYear, showQuarters, quarterLabels } = state

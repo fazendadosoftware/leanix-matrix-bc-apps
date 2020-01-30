@@ -2,7 +2,8 @@
   <div class="border rounded bg-whitesmoke p-1">
     <div
       v-for="application in relatedApplications" :key="application.id"
-      class="border bg-white p-1 rounded mb-1 last:mb-0">
+      class="border bg-white p-1 rounded mb-1 last:mb-0 transition-background"
+      :style="getComputedStyle(application.id)">
       {{application.name}}
     </div>
   </div>
@@ -18,8 +19,15 @@ export default {
       required: true
     }
   },
+  methods: {
+    getComputedStyle (applicationId) {
+      const legend = this.applicationViewIndex[applicationId] || {}
+      const { color, bgColor } = legend
+      return `color: ${color}; background-color: ${bgColor};`
+    }
+  },
   computed: {
-    ...mapGetters(['businessCapabilityIndex']),
+    ...mapGetters(['businessCapabilityIndex', 'applicationViewIndex']),
     relatedApplications () {
       const { businessCapabilityId, year, quarter } = this.cell
       const indexEntry = this.businessCapabilityIndex[businessCapabilityId] || {}
@@ -61,3 +69,8 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.transition-background
+  transition background 0.3s ease-in-out
+</style>

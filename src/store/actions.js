@@ -1,6 +1,6 @@
 import '@leanix/reporting'
 
-export const initializeReport = ({ commit, dispatch }) => {
+export const initializeReport = ({ commit }) => {
   lx.init()
     .then(async reportSetup => {
       commit('setReportSeup', reportSetup)
@@ -87,4 +87,44 @@ export const fetchDataset = async ({ commit }) => {
   commit('setDataset', dataset)
   commit('setBusinessCapabilityIndex', bcIndex)
   return dataset
+}
+
+export const fetchApplicationViewOptions = async ({ commit, state }) => {
+  const query = `{op:allFactSheets(factSheetType: Application){view{viewInfos{key label type}}}}`
+  const applicationViewOptions = await lx.executeGraphQL(query)
+    .then(({ op }) => op.view.viewInfos)
+  commit('setApplicationViewOptions', applicationViewOptions)
+  if (applicationViewOptions.length) commit('setApplicationViewKey', applicationViewOptions[0].key)
+}
+
+export const fetchApplicationView = async ({ commit, state }) => {
+  const { dataset, applicationViewKey } = state
+  if (!applicationViewKey) return
+  const applicationIDs = Array.from(dataset
+    .reduce((accumulator, businessCapability) => {
+      const { relatedApplications = [], children = [] } = businessCapability
+      relatedApplications.forEach(({ id }) => accumulator.add(id))
+      children.forEach(({ relatedApplications = [] }) => relatedApplications.forEach(({ id }) => accumulator.add(id)))
+      return accumulator
+    }, new Set()))
+
+  const query = `
+    query($filter:FilterInput){
+      op:allFactSheets(filter:$filter) {
+        view(key:"${applicationViewKey}") {
+          mapping{fsId legendId}
+          legendItems{id bgColor color transparency}
+        }
+      }
+    }
+  `
+  const variables = {
+    filter: {
+      facetFilters: [{ facetKey: 'FactSheetTypes', keys: ['Application'] }],
+      ids: applicationIDs
+    }
+  }
+  const applicationViewIndex = await lx.executeGraphQL(query, variables)
+    .then(({ op }) => op.view.mapping.reduce((accumulator, { fsId, legendId }) => ({ ...accumulator, [fsId]: op.view.legendItems[legendId + 1] }), {}))
+  commit('setApplicationViewIndex', applicationViewIndex)
 }

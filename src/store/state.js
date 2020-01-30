@@ -7,5 +7,8 @@ export default {
   quarterLabels: ['Q1', 'Q2', 'Q3', 'Q4'],
   dataset: [],
   businessCapabilityIndex: {},
-  expandedBusinessCapabilities: []
+  expandedBusinessCapabilities: [],
+  applicationViewIndex: {},
+  applicationViewOptions: [],
+  applicationViewKey: undefined
 }
