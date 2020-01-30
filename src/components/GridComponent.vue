@@ -1,11 +1,11 @@
 <template>
   <div class="outer-container overflow-auto relative custom-scrollbar">
-    <div class="inner-container" :style="gridContainerStyle">
+    <div class="inner-container grid" :style="gridContainerStyle">
       <template v-for="cell in cells">
         <pivot-cell v-if="cell.isPivotCell" :key="cell.id" :cell="cell"/>
         <year-header-cell v-if="cell.isHeader && cell.axis === 'x'" :key="cell.id" :cell="cell"/>
-        <business-capability-header-cell v-if="cell.isHeader && cell.axis === 'y'" :key="cell.id" :cell="cell"/>
-        <div v-if="cell.isBusinessCapabilityEmptyHeader" :key="cell.id" class="bg-darkgray"/>
+        <business-capability-header-cell v-if="cell.isHeader && cell.axis === 'y'" :key="cell.id" :cell="cell" :style="getComputedStyle(cell)"/>
+        <div v-if="cell.isBusinessCapabilityEmptyHeader" :key="cell.id" class="bg-darkgray rounded border" :style="getComputedStyle(cell)"/>
         <applications-cell v-if="cell.isContent" :key="cell.id" :cell="cell"/>
       </template>
     </div>
@@ -25,8 +25,20 @@ export default {
     BusinessCapabilityHeaderCell,
     ApplicationsCell
   },
+  data: () => ({
+    gridGapPx: 2,
+    firstColumnWidthPx: 200,
+    columnWidthPx: 200
+  }),
   methods: {
-    ...mapMutations(['setShowQuarters'])
+    ...mapMutations(['setShowQuarters']),
+    getComputedStyle (cell) {
+      const { level, isBusinessCapabilityEmptyHeader } = cell
+      if (level === 2 || isBusinessCapabilityEmptyHeader) {
+        return `position: sticky;left:${this.columnWidthPx + this.gridGapPx}px`
+      }
+      return ''
+    }
   },
   computed: {
     ...mapGetters(['years', 'cells', 'gridContainerStyle', 'showQuarters', 'columns', 'expandedBusinessCapabilities']),
@@ -34,11 +46,9 @@ export default {
       return this.expandedBusinessCapabilities.length > 0
     },
     gridContainerStyle () {
-      const firstColumnWidth = 200
-      const columnWidth = 200
       const columns = this.columns.length
-      const width = `width: ${columnWidth + 200 * columns}px;`
-      const style = `grid-template-columns: ${firstColumnWidth}px ${this.bcsDrilledDown ? `${firstColumnWidth}px` : ''}  ${columns ? `repeat(${columns}, ${columnWidth}px)` : ''}; ${width}`
+      const width = `width: ${this.columnWidthPx + this.columnWidthPx * columns}px;`
+      const style = `grid-gap:${this.gridGapPx}px;grid-template-columns: ${this.firstColumnWidthPx}px ${this.bcsDrilledDown ? `${this.firstColumnWidthPx}px` : ''}  ${columns ? `repeat(${columns}, ${this.columnWidthPx}px)` : ''}; ${width}`
       return style
     }
   },
@@ -50,9 +60,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus" scoped>
-.inner-container
-  display grid
-  grid-gap 2px
-</style>

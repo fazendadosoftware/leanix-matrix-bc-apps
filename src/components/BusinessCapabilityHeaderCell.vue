@@ -29,7 +29,8 @@ export default {
       const { id } = this.cell
       const legend = this.businessCapabilityViewIndex[id] || {}
       const { color, bgColor } = legend
-      return !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor}`
+      const style = !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor};`
+      return style
     }
   },
   methods: {
