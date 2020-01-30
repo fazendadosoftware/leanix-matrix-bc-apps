@@ -6,25 +6,31 @@
       Show Quarters? {{showQuarters}}
     </button>
     <button
-      class="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      class="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
       @click="toggleAllBusinessCapabilitiesChildren()">
       Toggle all Children?
+    </button>
+    <button
+      class="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      @click="fetchDataset()">
+      Reload
     </button>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   methods: {
+    ...mapActions(['fetchDataset']),
     ...mapMutations(['setShowQuarters']),
     toggleAllBusinessCapabilitiesChildren () {
       if (this.expandedBusinessCapabilities.length) this.expandedBusinessCapabilities.splice(0, this.expandedBusinessCapabilities.length)
-      else this.expandedBusinessCapabilities.splice(0, this.expandedBusinessCapabilities.length, ...this.businessCapabilities.map(({ id }) => id))
+      else this.expandedBusinessCapabilities.splice(0, this.expandedBusinessCapabilities.length, ...this.dataset.map(({ id }) => id))
     }
   },
   computed: {
-    ...mapGetters(['showQuarters', 'expandedBusinessCapabilities', 'businessCapabilities'])
+    ...mapGetters(['showQuarters', 'expandedBusinessCapabilities', 'dataset'])
   }
 }
 </script>

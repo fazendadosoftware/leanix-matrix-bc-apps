@@ -9,6 +9,8 @@ module.exports = {
       }
     }
   },
-  variants: {},
+  variants: {
+    margin: ['responsive', 'last', 'hover', 'focus']
+  },
   plugins: []
 }

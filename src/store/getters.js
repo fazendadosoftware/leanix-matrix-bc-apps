@@ -1,6 +1,7 @@
 export const years = state => [...Array(state.yearCount).keys()].map(offset => state.startYear + offset)
 export const showQuarters = state => state.showQuarters
-export const businessCapabilities = state => state.businessCapabilities
+export const dataset = state => state.dataset
+export const businessCapabilityIndex = state => state.businessCapabilityIndex
 export const expandedBusinessCapabilities = state => state.expandedBusinessCapabilities
 
 export const columns = state => {
@@ -8,7 +9,7 @@ export const columns = state => {
   const columns = [...Array(yearCount).keys()]
     .reduce((accumulator, offset) => {
       const year = startYear + offset
-      if (showQuarters) accumulator = [...accumulator, ...quarterLabels.map((label, i) => ({ year, quarter: i, id: `${year}-${label}`, label: `${year}-${label}` }))]
+      if (showQuarters) accumulator = [...accumulator, ...quarterLabels.map((label, i) => ({ year, quarter: i + 1, id: `${year}-${label}`, label: `${year}-${label}` }))]
       else accumulator.push({ year, id: year, label: `${year}` })
       return accumulator
     }, [])
