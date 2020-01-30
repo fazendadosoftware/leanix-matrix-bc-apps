@@ -35,20 +35,48 @@ export const cells = state => {
       }
       if (businessCapability === false) return accumulator
 
-      const firstCell = { ...businessCapability, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1) }
-      const row = [firstCell, ..._columns
-        .map(column => {
-          const { year, quarter = null } = column
-          const computedCellValue = {
-            id: `${businessCapability.id}-${year}-${quarter}`,
-            isContent: true,
-            businessCapabilityId: businessCapability.id,
-            year,
-            quarter
-          }
-          return computedCellValue
-        })]
-      return [ ...accumulator, ...row ]
+      if ((expandedBusinessCapabilities.indexOf(businessCapability.id) > -1) && Array.isArray(businessCapability.children) && businessCapability.children.length) {
+        const baseRow = i + 2
+        const bcHeaderCell = { ...businessCapability, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1), style: `grid-row: ${baseRow}/${baseRow + businessCapability.children.length} ` }
+        accumulator.push(bcHeaderCell)
+        businessCapability.children
+          .forEach(child => {
+            const firstCell = { ...child, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1), style: `` }
+            const row = [firstCell, ..._columns
+              .map(column => {
+                const { year, quarter = null } = column
+                const computedCellValue = {
+                  id: `${child.id}-${year}-${quarter}`,
+                  isContent: true,
+                  businessCapabilityId: child.id,
+                  year,
+                  quarter
+                }
+                return computedCellValue
+              })]
+            row.forEach(cell => accumulator.push(cell))
+          })
+      } else {
+        const firstCell = { ...businessCapability, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1), style: `` }
+        const row = [firstCell, ..._columns
+          .map(column => {
+            const { year, quarter = null } = column
+            const computedCellValue = {
+              id: `${businessCapability.id}-${year}-${quarter}`,
+              isContent: true,
+              businessCapabilityId: businessCapability.id,
+              year,
+              quarter
+            }
+            return computedCellValue
+          })]
+        if (bcsDrilledDown) {
+          const secondColumn = { id: `${businessCapability.id}-empty`, isBusinessCapabilityEmptyHeader: true }
+          row.splice(1, 0, secondColumn)
+        }
+        row.forEach(cell => accumulator.push(cell))
+      }
+      return accumulator
     }, [])
   return cells
 }
