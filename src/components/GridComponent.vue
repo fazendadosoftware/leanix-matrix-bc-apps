@@ -1,6 +1,6 @@
 <template>
-  <div class="outer-container overflow-auto relative">
-    <div class="grid" :style="containerStyle">
+  <div class="outer-container overflow-auto relative custom-scrollbar">
+    <div class="grid" :style="gridContainerStyle">
       <template v-for="cell in cells">
         <pivot-cell v-if="cell.isPivotCell" :key="cell.id" />
         <year-header-cell v-if="cell.isHeader && cell.axis === 'x'" :key="cell.id" :cell="cell"/>
@@ -29,17 +29,13 @@ export default {
   },
   computed: {
     ...mapGetters(['years', 'cells', 'gridContainerStyle', 'showQuarters', 'columns']),
-    containerStyle () {
-      const columns = this.columns.length
-      const firstColumnWidth = '200px'
-      const columnWidth = '200px'
-      const style = `grid-template-columns: ${firstColumnWidth} ${columns ? `repeat(${columns}, ${columnWidth})` : ''};`
-      return style
-    },
-    outerContainerStyle () {
-      const columns = this.columns.length
+    gridContainerStyle () {
+      const firstColumnWidth = 200
       const columnWidth = 200
-      return `width: ${columnWidth + 200 * columns}px;`
+      const columns = this.columns.length
+      const width = `width: ${columnWidth + 200 * columns}px;`
+      const style = `grid-template-columns: ${firstColumnWidth}px ${columns ? `repeat(${columns}, ${columnWidth}px)` : ''}; ${width}`
+      return style
     }
   },
   mounted () {
