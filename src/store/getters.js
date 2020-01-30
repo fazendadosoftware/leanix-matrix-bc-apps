@@ -36,8 +36,8 @@ export const cells = state => {
       if (businessCapability === false) return accumulator
 
       if ((expandedBusinessCapabilities.indexOf(businessCapability.id) > -1) && Array.isArray(businessCapability.children) && businessCapability.children.length) {
-        const baseRow = i + 2
-        const bcHeaderCell = { ...businessCapability, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1), style: `grid-row: ${baseRow}/${baseRow + businessCapability.children.length} ` }
+        // const baseRow = i + 2
+        const bcHeaderCell = { ...businessCapability, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1), style: `grid-row: span ${businessCapability.children.length}` }
         accumulator.push(bcHeaderCell)
         businessCapability.children
           .forEach(child => {
