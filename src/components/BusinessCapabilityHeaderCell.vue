@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky left-0 flex border bg-white p-1" :style="cell.style">
+  <div class="sticky left-0 flex items-center bg-darkslategray text-white font-semibold tracking-wider text-md p-1" :style="cell.style">
     <div
       v-if="Array.isArray(cell.children) && cell.children.length"
       class="cursor-pointer px-2" @click="toggleExpandedBusinessCapability">

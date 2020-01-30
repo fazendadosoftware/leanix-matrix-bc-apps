@@ -36,12 +36,11 @@ export const cells = state => {
       if (businessCapability === false) return accumulator
 
       if ((expandedBusinessCapabilities.indexOf(businessCapability.id) > -1) && Array.isArray(businessCapability.children) && businessCapability.children.length) {
-        // const baseRow = i + 2
         const bcHeaderCell = { ...businessCapability, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1), style: `grid-row: span ${businessCapability.children.length}` }
         accumulator.push(bcHeaderCell)
         businessCapability.children
           .forEach(child => {
-            const firstCell = { ...child, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1), style: `` }
+            const firstCell = { ...child, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1) }
             const row = [firstCell, ..._columns
               .map(column => {
                 const { year, quarter = null } = column
@@ -57,7 +56,7 @@ export const cells = state => {
             row.forEach(cell => accumulator.push(cell))
           })
       } else {
-        const firstCell = { ...businessCapability, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1), style: `` }
+        const firstCell = { ...businessCapability, isHeader: true, axis: 'y', isFirst: i === 0, isLast: i === (businessCapabilities.length - 1) }
         const row = [firstCell, ..._columns
           .map(column => {
             const { year, quarter = null } = column

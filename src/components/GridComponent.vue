@@ -1,11 +1,11 @@
 <template>
   <div class="outer-container overflow-auto relative custom-scrollbar">
-    <div class="grid" :style="gridContainerStyle">
+    <div class="inner-container" :style="gridContainerStyle">
       <template v-for="cell in cells">
         <pivot-cell v-if="cell.isPivotCell" :key="cell.id" :cell="cell"/>
         <year-header-cell v-if="cell.isHeader && cell.axis === 'x'" :key="cell.id" :cell="cell"/>
         <business-capability-header-cell v-if="cell.isHeader && cell.axis === 'y'" :key="cell.id" :cell="cell"/>
-        <div v-if="cell.isBusinessCapabilityEmptyHeader" :key="cell.id" class="border bg-gray-300"/>
+        <div v-if="cell.isBusinessCapabilityEmptyHeader" :key="cell.id" class="bg-darkgray"/>
         <applications-cell v-if="cell.isContent" :key="cell.id" :cell="cell"/>
       </template>
     </div>
@@ -50,3 +50,9 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.inner-container
+  display grid
+  grid-gap 2px
+</style>

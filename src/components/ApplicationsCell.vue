@@ -1,5 +1,5 @@
 <template>
-  <div class="border p-1">
+  <div class="border rounded bg-whitesmoke p-1">
     {{label}}
   </div>
 </template>
