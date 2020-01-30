@@ -137,7 +137,7 @@ export const fetchApplicationView = async ({ commit, state }) => {
 export const fetchFactSheetTypeView = async ({ commit, state }, factSheetType) => {
   let { dataset, viewKey } = state
   viewKey = viewKey[factSheetType]
-  if (typeof viewKey === 'undefined') {
+  if (typeof viewKey === 'undefined' || viewKey === null) {
     commit('setViewIndex', { factSheetType, viewIndex: {} })
     return
   }

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="sticky left-0 flex items-center bg-darkslategray text-white font-semibold tracking-wider text-md p-1 rounded"
+    class="sticky left-0 flex items-center bg-darkslategray text-white font-semibold tracking-wider text-md p-1 rounded border"
     :style="`${cell.style};${style}`">
     <div
       v-if="Array.isArray(cell.children) && cell.children.length"
@@ -29,7 +29,7 @@ export default {
       const { id } = this.cell
       const legend = this.businessCapabilityViewIndex[id] || {}
       const { color, bgColor } = legend
-      return !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor};`
+      return !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor}`
     }
   },
   methods: {
