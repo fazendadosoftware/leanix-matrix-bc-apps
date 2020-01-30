@@ -3,9 +3,18 @@ export const showQuarters = state => state.showQuarters
 export const dataset = state => state.dataset
 export const businessCapabilityIndex = state => state.businessCapabilityIndex
 export const expandedBusinessCapabilities = state => state.expandedBusinessCapabilities
-export const applicationViewIndex = state => state.applicationViewIndex
-export const applicationViewOptions = state => state.applicationViewOptions
-export const applicationViewKey = state => state.applicationViewKey
+
+export const applicationViewIndex = state => state.viewIndex.Application || {}
+export const applicationViewOptions = state => state.viewOptions.Application || []
+export const applicationViewKey = state => state.viewKey.Application
+
+export const businessCapabilityViewIndex = state => state.viewIndex.BusinessCapability || {}
+export const businessCapabilityViewOptions = state => state.viewOptions.BusinessCapability || []
+export const businessCapabilityViewKey = state => state.viewKey.BusinessCapability
+
+export const getViewIndex = state => factSheetType => state.viewIndex[factSheetType]
+export const getViewOptions = state => factSheetType => state.viewOptions[factSheetType] || []
+export const getViewKey = state => factSheetType => state.viewKey[factSheetType]
 
 export const columns = state => {
   const { yearCount, startYear, showQuarters, quarterLabels } = state

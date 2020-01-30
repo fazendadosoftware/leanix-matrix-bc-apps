@@ -10,5 +10,12 @@ export default {
   expandedBusinessCapabilities: [],
   applicationViewIndex: {},
   applicationViewOptions: [],
-  applicationViewKey: undefined
+  applicationViewKey: undefined,
+  businessCapabilityViewIndex: {},
+  businessCapabilityViewOptions: [],
+  businessCapabilityViewKey: undefined,
+
+  viewOptions: {},
+  viewKey: {},
+  viewIndex: {}
 }

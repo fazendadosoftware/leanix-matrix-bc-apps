@@ -89,17 +89,22 @@ export const fetchDataset = async ({ commit }) => {
   return dataset
 }
 
-export const fetchApplicationViewOptions = async ({ commit, state }) => {
-  const query = `{op:allFactSheets(factSheetType: Application){view{viewInfos{key label type}}}}`
-  const applicationViewOptions = await lx.executeGraphQL(query)
+export const fetchViewOptions = async ({ commit }, factSheetType) => {
+  if (!factSheetType) throw Error('factsheet type is required')
+  const query = `{op:allFactSheets(factSheetType: ${factSheetType}){view{viewInfos{key label type}}}}`
+  const viewOptions = await lx.executeGraphQL(query)
     .then(({ op }) => op.view.viewInfos)
-  commit('setApplicationViewOptions', applicationViewOptions)
-  if (applicationViewOptions.length) commit('setApplicationViewKey', applicationViewOptions[0].key)
+  commit('setViewOptions', { factSheetType, viewOptions })
+  if (viewOptions.length) commit('setViewKey', { factSheetType, viewKey: viewOptions[0].key })
 }
 
 export const fetchApplicationView = async ({ commit, state }) => {
-  const { dataset, applicationViewKey } = state
-  if (!applicationViewKey) return
+  const { dataset, viewKey } = state
+  const applicationViewKey = viewKey.Application
+  if (typeof applicationViewKey === 'undefined') {
+    commit('setViewIndex', { factSheetType: 'Application', viewIndex: {} })
+    return
+  }
   const applicationIDs = Array.from(dataset
     .reduce((accumulator, businessCapability) => {
       const { relatedApplications = [], children = [] } = businessCapability
@@ -126,5 +131,47 @@ export const fetchApplicationView = async ({ commit, state }) => {
   }
   const applicationViewIndex = await lx.executeGraphQL(query, variables)
     .then(({ op }) => op.view.mapping.reduce((accumulator, { fsId, legendId }) => ({ ...accumulator, [fsId]: op.view.legendItems[legendId + 1] }), {}))
-  commit('setApplicationViewIndex', applicationViewIndex)
+  commit('setViewIndex', { factSheetType: 'Application', viewIndex: applicationViewIndex })
+}
+
+export const fetchFactSheetTypeView = async ({ commit, state }, factSheetType) => {
+  let { dataset, viewKey } = state
+  viewKey = viewKey[factSheetType]
+  if (typeof viewKey === 'undefined') {
+    commit('setViewIndex', { factSheetType, viewIndex: {} })
+    return
+  }
+  let ids = []
+  if (factSheetType === 'Application') {
+    ids = Array.from(dataset
+      .reduce((accumulator, businessCapability) => {
+        const { relatedApplications = [], children = [] } = businessCapability
+        relatedApplications.forEach(({ id }) => accumulator.add(id))
+        children.forEach(({ relatedApplications = [] }) => relatedApplications.forEach(({ id }) => accumulator.add(id)))
+        return accumulator
+      }, new Set()))
+  } else if (factSheetType === 'BusinessCapability') {
+    ids = Array.from(dataset
+      .reduce((accumulator, businessCapability) => {
+        const { id, children = [] } = businessCapability
+        accumulator.add(id)
+        children.forEach(({ id }) => accumulator.add(id))
+        return accumulator
+      }, new Set()))
+  }
+
+  const query = `
+    query($filter:FilterInput){
+      op:allFactSheets(filter:$filter) {
+        view(key:"${viewKey}") {
+          mapping{fsId legendId}
+          legendItems{id bgColor color transparency}
+        }
+      }
+    }
+  `
+  const variables = { filter: { facetFilters: [{ facetKey: 'FactSheetTypes', keys: [factSheetType] }], ids } }
+  const viewIndex = await lx.executeGraphQL(query, variables)
+    .then(({ op }) => op.view.mapping.reduce((accumulator, { fsId, legendId }) => ({ ...accumulator, [fsId]: op.view.legendItems[legendId + 1] }), {}))
+  commit('setViewIndex', { factSheetType, viewIndex })
 }

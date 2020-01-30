@@ -23,7 +23,7 @@ export default {
     getComputedStyle (applicationId) {
       const legend = this.applicationViewIndex[applicationId] || {}
       const { color, bgColor } = legend
-      return `color: ${color}; background-color: ${bgColor};`
+      return !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor};`
     }
   },
   computed: {

@@ -15,15 +15,16 @@
       @click="fetchDataset()">
       Reload
     </button>
-    <application-view-dropdown />
+    <view-option-selector factSheetType="Application"/>
+    <view-option-selector factSheetType="BusinessCapability"/>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
-import ApplicationViewDropdown from '@/components/ApplicationViewDropdown'
+import ViewOptionSelector from '@/components/ViewOptionSelector'
 export default {
-  components: { ApplicationViewDropdown },
+  components: { ViewOptionSelector },
   methods: {
     ...mapActions(['fetchDataset']),
     ...mapMutations(['setShowQuarters']),
