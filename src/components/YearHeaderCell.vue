@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky top-0 p-1 text-white bg-dodgerblue font-semibold tracking-wider text-md flex justify-center items-center">
+  <div class="sticky top-0 p-1 text-white bg-dodgerblue font-semibold tracking-wider text-lg flex justify-center items-center" style="font-size: 1.2em">
     {{cell.label}}
   </div>
 </template>
