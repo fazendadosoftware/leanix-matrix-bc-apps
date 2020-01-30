@@ -19,7 +19,7 @@ export const cells = state => {
   const bcsDrilledDown = expandedBusinessCapabilities.length > 0
   const _columns = columns(state)
 
-  const businessCapabilities = [ ...state.businessCapabilities ]
+  const businessCapabilities = [ ...state.dataset ]
   if (!businessCapabilities.length) businessCapabilities[0] = false
 
   const cells = businessCapabilities
