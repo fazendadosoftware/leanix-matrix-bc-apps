@@ -2,3 +2,4 @@
 @import './custom-base.css';
 @tailwind components;
 @tailwind utilities;
+@import './custom-utilities.css';

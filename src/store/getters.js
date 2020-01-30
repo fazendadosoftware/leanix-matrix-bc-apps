@@ -1,6 +1,7 @@
 export const years = state => [...Array(state.yearCount).keys()].map(offset => state.startYear + offset)
 export const showQuarters = state => state.showQuarters
 export const businessCapabilities = state => state.businessCapabilities
+export const expandedBusinessCapabilities = state => state.expandedBusinessCapabilities
 
 export const columns = state => {
   const { yearCount, startYear, showQuarters, quarterLabels } = state
