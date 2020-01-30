@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
-    <header-component v-if="false"/>
-    <grid-component />
+  <div id="app" class="overflow-y-hidden">
+    <header-component/>
+    <grid-component ref="grid" :style="`max-height: ${gridMaxHeight}px`"/>
   </div>
 </template>
 
@@ -13,6 +13,27 @@ export default {
   components: {
     HeaderComponent,
     GridComponent
+  },
+  data: () => ({
+    gridMaxHeight: 0
+  }),
+  methods: {
+    computeGridMaxHeight () {
+      let gridMaxHeight = 0
+      if (this.$refs.grid) {
+        const { top } = this.$refs.grid.$el.getBoundingClientRect()
+        const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+        gridMaxHeight = vh - top
+      }
+      this.gridMaxHeight = gridMaxHeight
+    }
+  },
+  mounted () {
+    setTimeout(() => this.computeGridMaxHeight(), 100)
+    window.addEventListener('resize', this.computeGridMaxHeight)
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.computeGridMaxHeight)
   }
 }
 </script>

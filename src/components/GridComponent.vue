@@ -1,6 +1,6 @@
 <template>
-  <div class="outer-container" :style="outerContainerStyle">
-    <div class="grid bg-red-300" :style="containerStyle">
+  <div class="outer-container overflow-auto relative">
+    <div class="grid" :style="containerStyle">
       <template v-for="cell in cells">
         <pivot-cell v-if="cell.isPivotCell" :key="cell.id" />
         <year-header-cell v-if="cell.isHeader && cell.axis === 'x'" :key="cell.id" :cell="cell"/>
@@ -8,7 +8,6 @@
         <applications-cell v-if="cell.isContent" :key="cell.id" :cell="cell"/>
       </template>
     </div>
-    <button @click="setShowQuarters(!showQuarters)">Show Quarters ? {{showQuarters}}</button>
   </div>
 </template>
 
@@ -42,6 +41,12 @@ export default {
       const columnWidth = 200
       return `width: ${columnWidth + 200 * columns}px;`
     }
+  },
+  mounted () {
+    setTimeout(() => {
+      const { top } = this.$el.getBoundingClientRect()
+      this.top = top
+    }, 100)
   }
 }
 </script>
