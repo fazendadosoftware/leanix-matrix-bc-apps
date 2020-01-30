@@ -15,6 +15,8 @@ export const columns = state => {
   return columns
 }
 export const cells = state => {
+  const { expandedBusinessCapabilities } = state
+  const bcsDrilledDown = expandedBusinessCapabilities.length > 0
   const _columns = columns(state)
 
   const businessCapabilities = [ ...state.businessCapabilities ]
@@ -24,7 +26,10 @@ export const cells = state => {
     .reduce((accumulator, businessCapability, i) => {
       // Compute x header row and add it to the accumulator
       if (i === 0) {
-        const firstRow = [{ class: 'pivot-cell', id: 'pivot-cell', isPivotCell: true }, ..._columns.map((column, j) => ({ ...column, isHeader: true, axis: 'x', isFirst: j === 0, isLast: j === (_columns.length - 1) }))]
+        const firstRow = [
+          { class: 'pivot-cell', id: 'pivot-cell', isPivotCell: true, style: `grid-column: 1/${bcsDrilledDown ? 3 : 2}` },
+          ..._columns.map((column, j) => ({ ...column, isHeader: true, axis: 'x', isFirst: j === 0, isLast: j === (_columns.length - 1) }))
+        ]
 
         accumulator = [ ...accumulator, ...firstRow ]
       }
