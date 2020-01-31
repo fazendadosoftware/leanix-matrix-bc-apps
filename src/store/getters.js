@@ -1,3 +1,4 @@
+export const translations = state => state.reportSetup && state.reportSetup.settings ? state.reportSetup.settings.translations : {}
 export const years = state => [...Array(state.yearCount).keys()].map(offset => state.startYear + offset)
 export const showQuarters = state => state.showQuarters
 export const dataset = state => state.dataset

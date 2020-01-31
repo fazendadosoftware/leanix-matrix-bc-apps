@@ -89,7 +89,7 @@ export const fetchDataset = async ({ commit }) => {
   return dataset
 }
 
-export const fetchViewOptions = async ({ commit }, factSheetType) => {
+export const fetchViewOptions = async ({ commit, state }, factSheetType) => {
   if (!factSheetType) throw Error('factsheet type is required')
   const query = `{op:allFactSheets(factSheetType: ${factSheetType}){view{viewInfos{key label type}}}}`
   const viewOptions = await lx.executeGraphQL(query)

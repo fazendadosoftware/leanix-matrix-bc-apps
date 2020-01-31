@@ -23,9 +23,24 @@ export default {
     ...mapMutations(['setViewKey'])
   },
   computed: {
-    ...mapGetters(['getViewOptions', 'getViewKey']),
+    ...mapGetters(['getViewOptions', 'getViewKey', 'translations']),
     viewOptions () {
-      return this.getViewOptions(this.factSheetType)
+      const viewOptions = this.getViewOptions(this.factSheetType)
+        .map(({ label, key, type }) => {
+          if (type === 'FIELD') label = this.$lx.translateField(this.factSheetType, key)
+          else if (type === 'FIELD_TARGET_FS') {
+            let [ relName, targetFsType, targetField ] = key.split('.')
+            relName = this.$lx.translateRelation(relName)
+            targetField = this.$lx.translateField(targetFsType, targetField)
+            label = `${relName}: ${targetField}`
+          } else if (type === 'FIELD_RELATION') {
+            let [ relName, relField ] = key.split('.')
+            relName = this.$lx.translateRelation(relName)
+            label = `${relName}: ${relField}`
+          }
+          return { label, key, type }
+        })
+      return viewOptions
     },
     viewOption: {
       get () {
