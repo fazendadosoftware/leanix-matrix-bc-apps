@@ -6,6 +6,14 @@ export default async store => {
   store.dispatch('fetchDataset')
 
   store.watch(
+    state => state.loadingDataset,
+    (val, oldVal) => {
+      if (oldVal === 0 && val > 0) lx.showSpinner()
+      else if (oldVal > 0 && val === 0) lx.hideSpinner()
+    }
+  )
+
+  store.watch(
     state => state.viewKey.Application,
     () => store.dispatch('fetchFactSheetTypeView', 'Application')
   )

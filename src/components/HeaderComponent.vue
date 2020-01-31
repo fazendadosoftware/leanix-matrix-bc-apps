@@ -1,30 +1,30 @@
 <template>
-  <div class="border mb-2 p-2">
-    <button
-      class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-      @click="setShowQuarters(!showQuarters)">
-      Show Quarters? {{showQuarters}}
-    </button>
-    <button
-      class="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
-      @click="toggleAllBusinessCapabilitiesChildren()">
-      Toggle all Children?
-    </button>
-    <button
-      class="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-      @click="fetchDataset()">
-      Reload
-    </button>
-    <view-option-selector factSheetType="Application"/>
-    <view-option-selector factSheetType="BusinessCapability"/>
+  <div class="flex items-center mr-3 mt-2 mb-6">
+    <div>
+      <view-option-selector factSheetType="Application"/>
+      <view-option-selector factSheetType="BusinessCapability"/>
+    </div>
+    <div class="flex-1"/>
+    <leanix-button
+      class="mr-1 rotate-icon"
+      :label="`${!showQuarters ? 'Expand' : 'Collapse'} quarters`"
+      :icon="showQuarters ? 'chevron-down' : 'chevron-right'"
+      :action="setShowQuarters" :action-args="!showQuarters"/>
+    <leanix-button
+      class="mr-1"
+      :label="`${shouldCollapseChildren ? 'Collapse' : 'Expand'} all children`"
+      :icon="shouldCollapseChildren ? 'chevron-down' : 'chevron-right'"
+      :action="toggleAllBusinessCapabilitiesChildren"/>
+    <leanix-button icon="sync" :action="fetchDataset" :spin="loadingDataset"/>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import ViewOptionSelector from '@/components/ViewOptionSelector'
+import LeanixButton from '@/components/LeanixButton'
 export default {
-  components: { ViewOptionSelector },
+  components: { ViewOptionSelector, LeanixButton },
   methods: {
     ...mapActions(['fetchDataset']),
     ...mapMutations(['setShowQuarters']),
@@ -34,7 +34,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['showQuarters', 'expandedBusinessCapabilities', 'dataset'])
+    ...mapGetters(['showQuarters', 'expandedBusinessCapabilities', 'dataset', 'loadingDataset']),
+    shouldCollapseChildren () {
+      return this.expandedBusinessCapabilities.length > 0
+    }
   }
 }
 </script>

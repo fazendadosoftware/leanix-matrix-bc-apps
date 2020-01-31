@@ -8,6 +8,7 @@ export default {
   dataset: [],
   businessCapabilityIndex: {},
   expandedBusinessCapabilities: [],
+  loadingDataset: 0,
 
   viewOptions: {},
   viewKey: {},

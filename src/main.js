@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import vSelect from 'vue-select'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faChevronRight, faChevronDown, faSync } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import App from './App'
 import store from './store'
@@ -12,7 +12,7 @@ import 'vue-select/dist/vue-select.css'
 /* global lx */
 Vue.prototype.$lx = lx
 
-library.add(faChevronRight)
+library.add(faChevronRight, faChevronDown, faSync)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('v-select', vSelect)

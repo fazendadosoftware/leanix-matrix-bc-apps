@@ -27,7 +27,8 @@ export const initializeReport = ({ commit }) => {
 }
 
 export const fetchDataset = async ({ commit }) => {
-  lx.showSpinner()
+  // lx.showSpinner()
+  commit('loadingDatasetStart')
   const factSheetFields = `id name type level`
   const relatedApplications = `...on BusinessCapability {relatedApplications: relBusinessCapabilityToApplication{edges {node {factSheet {${factSheetFields}...on Application{lifecycle{phases{phase startDate}}}}}}}}`
   const children = `children: relToChild {edges {node {factSheet {${factSheetFields} ${relatedApplications}}}}}`
@@ -69,10 +70,10 @@ export const fetchDataset = async ({ commit }) => {
           }))
       })))
     .catch(err => {
-      lx.hideSpinner()
+      commit('loadingDatasetDone')
       throw err
     })
-  lx.hideSpinner()
+  commit('loadingDatasetDone')
   const bcIndex = dataset
     .reduce((accumulator, businessCapability) => {
       const { id, relatedApplications, children } = businessCapability
