@@ -21,7 +21,7 @@ export default {
   computed: {
     ...mapGetters(['getViewOptions', 'getViewKey', 'reportSetup']),
     translatedFactSheetType () {
-      const translatedFactSheetType = (((((this.reportSetup || {}).settings || {}).translations || {}).factSheetTypes) || {})[this.factSheetType]
+      const translatedFactSheetType = (((((this.reportSetup || {}).settings || {}).translations || {}).factSheetTypes) || {})[this.factSheetType + '.plural']
       return translatedFactSheetType
     },
     viewOptions () {
