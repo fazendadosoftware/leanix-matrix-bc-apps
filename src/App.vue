@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="overflow-y-hidden container mx-auto">
+  <div id="app" class="overflow-y-hidden">
     <header-component/>
     <grid-component ref="grid" :style="`max-height: ${gridMaxHeight}px`"/>
   </div>
