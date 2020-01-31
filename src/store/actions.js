@@ -99,42 +99,6 @@ export const fetchViewOptions = async ({ commit, state }, factSheetType) => {
   if (viewOptions.length) commit('setViewKey', { factSheetType, viewKey: viewOptions[0].key })
 }
 
-export const fetchApplicationView = async ({ commit, state }) => {
-  const { dataset, viewKey } = state
-  const applicationViewKey = viewKey.Application
-  if (typeof applicationViewKey === 'undefined') {
-    commit('setViewIndex', { factSheetType: 'Application', viewIndex: {} })
-    return
-  }
-  const applicationIDs = Array.from(dataset
-    .reduce((accumulator, businessCapability) => {
-      const { relatedApplications = [], children = [] } = businessCapability
-      relatedApplications.forEach(({ id }) => accumulator.add(id))
-      children.forEach(({ relatedApplications = [] }) => relatedApplications.forEach(({ id }) => accumulator.add(id)))
-      return accumulator
-    }, new Set()))
-
-  const query = `
-    query($filter:FilterInput){
-      op:allFactSheets(filter:$filter) {
-        view(key:"${applicationViewKey}") {
-          mapping{fsId legendId}
-          legendItems{id bgColor color transparency}
-        }
-      }
-    }
-  `
-  const variables = {
-    filter: {
-      facetFilters: [{ facetKey: 'FactSheetTypes', keys: ['Application'] }],
-      ids: applicationIDs
-    }
-  }
-  const applicationViewIndex = await lx.executeGraphQL(query, variables)
-    .then(({ op }) => op.view.mapping.reduce((accumulator, { fsId, legendId }) => ({ ...accumulator, [fsId]: op.view.legendItems[legendId + 1] }), {}))
-  commit('setViewIndex', { factSheetType: 'Application', viewIndex: applicationViewIndex })
-}
-
 export const fetchFactSheetTypeView = async ({ commit, state }, factSheetType) => {
   let { dataset, viewKey } = state
   viewKey = viewKey[factSheetType]
@@ -172,7 +136,11 @@ export const fetchFactSheetTypeView = async ({ commit, state }, factSheetType) =
     }
   `
   const variables = { filter: { facetFilters: [{ facetKey: 'FactSheetTypes', keys: [factSheetType] }], ids } }
-  const viewIndex = await lx.executeGraphQL(query, variables)
-    .then(({ op }) => op.view.mapping.reduce((accumulator, { fsId, legendId }) => ({ ...accumulator, [fsId]: op.view.legendItems[legendId + 1] }), {}))
+  const { viewIndex } = await lx.executeGraphQL(query, variables)
+    .then(({ op }) => {
+      let { mapping, legendItems } = op.view
+      const viewIndex = mapping.reduce((accumulator, { fsId, legendId }) => ({ ...accumulator, [fsId]: op.view.legendItems[legendId + 1] }), {})
+      return { viewIndex, legendItems }
+    })
   commit('setViewIndex', { factSheetType, viewIndex })
 }

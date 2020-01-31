@@ -3,7 +3,7 @@
     <div
       v-for="application in relatedApplications" :key="application.id"
       class="border bg-white p-1 rounded mb-1 last:mb-0 transition-background"
-      :style="getComputedStyle(application.id)">
+      :style="getComputedStyle(application)">
       {{application.name}}
     </div>
   </div>
@@ -20,14 +20,41 @@ export default {
     }
   },
   methods: {
-    getComputedStyle (applicationId) {
-      const legend = this.applicationViewIndex[applicationId] || {}
+    getComputedStyle (application) {
+      const { id, lifecycle = {} } = application
+      let { phases = [] } = lifecycle === null ? {} : lifecycle
+      if (this.viewKey === 'lifecycle') {
+        let { year, quarter } = this.cell
+        const cellDate = moment().set('year', year)
+        if (quarter !== null) cellDate.set('quarter', quarter)
+        const cellStart = cellDate.startOf(quarter === null ? 'year' : 'quarter').format('YYYY-MM-DD')
+        const cellEnd = cellDate.endOf(quarter === null ? 'year' : 'quarter').format('YYYY-MM-DD')
+        phases = [ ...phases ].reverse()
+        let style
+        phases.every(({ phase, startDate }) => {
+          startDate = moment(startDate)
+          if (startDate.isBetween(cellStart, cellEnd)) {
+            const { color, bgColor } = this.lifecycleFieldMetadata[phase] || {}
+            style = !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor};`
+            return false
+          }
+          return true
+        })
+        if (style) return style
+      }
+      const legend = this.applicationViewIndex[id] || {}
       const { color, bgColor } = legend
       return !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor};`
     }
   },
   computed: {
-    ...mapGetters(['businessCapabilityIndex', 'applicationViewIndex']),
+    ...mapGetters(['businessCapabilityIndex', 'applicationViewIndex', 'getViewKey']),
+    lifecycleFieldMetadata () {
+      return (this.$lx.getFactSheetFieldMetaData('Application', 'lifecycle') || {}).values
+    },
+    viewKey () {
+      return this.getViewKey('Application')
+    },
     relatedApplications () {
       const { businessCapabilityId, year, quarter } = this.cell
       const indexEntry = this.businessCapabilityIndex[businessCapabilityId] || {}
