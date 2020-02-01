@@ -39,5 +39,5 @@ export default {
 .leanix-btn
   padding 3px 7px
   height 24px
-  transition color,background-color,border-color .18s
+  transition background 0.18s ease-in-out
 </style>

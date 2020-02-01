@@ -3,8 +3,8 @@ module.exports = {
     extend: {
       colors: {
         dodgerblue: '#0e90d2',
-        darkslategray: '#354567',
-        darkgray: '#aeaeae',
+        darkslategray: '#333333',
+        darkgray: '#aaaaaa',
         gainsboro: '#e6e6e6',
         whitesmoke: '#f3f3f3',
         royalblue: '#1665ee',

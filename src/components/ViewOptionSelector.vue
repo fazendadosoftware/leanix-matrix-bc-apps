@@ -25,6 +25,15 @@ export default {
       return translatedFactSheetType
     },
     viewOptions () {
+      const categoryOrder = ['FIELD', 'FIELD_RELATION', 'FIELD_TARGET_FS', 'TAG', 'BUILT_IN']
+      const categoryLabels = {
+        FIELD: 'FIELDS ON FACT SHEET',
+        FIELD_RELATION: 'FIELDS ON RELATIONS',
+        FIELD_TARGET_FS: 'FIELDS ON RELATED FACT SHEETS',
+        TAG: 'TAGS',
+        BUILT_IN: 'BUILT IN'
+      }
+
       const viewOptions = this.getViewOptions(this.factSheetType)
         .map(({ label, key, type }) => {
           if (type === 'FIELD') label = this.$lx.translateField(this.factSheetType, key)
@@ -45,6 +54,18 @@ export default {
           }
           return { label, key, type }
         })
+        .sort((optionA, optionB) => {
+          const indexOfTypeA = categoryOrder.indexOf(optionA.type)
+          const indexOfTypeB = categoryOrder.indexOf(optionB.type)
+          return indexOfTypeA - indexOfTypeB
+        })
+        .reduce((accumulator, option, i, options) => {
+          const { type } = option
+          const previousType = accumulator.length ? accumulator[accumulator.length - 1].type : undefined
+          if (type !== previousType) accumulator.push({ type, label: categoryLabels[type] || type, separator: true })
+          accumulator.push(option)
+          return accumulator
+        }, [])
       return viewOptions
     },
     viewOption: {
