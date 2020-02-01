@@ -26,6 +26,12 @@ export const initializeReport = ({ commit }) => {
     })
 }
 
+export const openFactSheetPreview = ({ state }, factSheet) => {
+  const { id, type } = factSheet
+  const uri = `/factsheet/${type}/${id}`
+  lx.openLink(`${state.baseUrl}${uri}`)
+}
+
 export const fetchDataset = async ({ commit }) => {
   // lx.showSpinner()
   commit('loadingDatasetStart')

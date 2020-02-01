@@ -2,15 +2,17 @@
   <div class="border rounded bg-whitesmoke p-1">
     <div
       v-for="application in relatedApplications" :key="application.id"
-      class="border bg-white p-1 rounded mb-1 last:mb-0 transition-background"
+      class="border bg-white p-1 rounded mb-1 last:mb-0 transition-background flex flex-col items-center leading-tight hover:underline"
       :style="getComputedStyle(application)">
-      {{application.name}}
+      <span class="cursor-pointer" @click="openFactSheetPreview(application)">
+        {{application.name}}
+      </span>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 export default {
   props: {
@@ -20,31 +22,38 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['openFactSheetPreview']),
     getComputedStyle (application) {
       const { id, lifecycle = {} } = application
-      let { phases = [] } = lifecycle === null ? {} : lifecycle
       if (this.viewKey === 'lifecycle') {
+        // default style should be N/A
+        let style
+        let { phases = [] } = lifecycle === null ? {} : lifecycle
+        if (!phases.length) return style
         let { year, quarter } = this.cell
         const cellDate = moment().set('year', year)
         if (quarter !== null) cellDate.set('quarter', quarter)
-        const cellStart = cellDate.startOf(quarter === null ? 'year' : 'quarter').format('YYYY-MM-DD')
-        const cellEnd = cellDate.endOf(quarter === null ? 'year' : 'quarter').format('YYYY-MM-DD')
-        phases = [ ...phases ].reverse()
-        let style
+        let cellStart = cellDate.startOf(quarter === null ? 'year' : 'quarter').format('YYYY-MM-DD')
+        let cellEnd = cellDate.endOf(quarter === null ? 'year' : 'quarter').format('YYYY-MM-DD')
+
         phases.every(({ phase, startDate }) => {
           startDate = moment(startDate)
-          if (startDate.isBetween(cellStart, cellEnd)) {
+          if (startDate.isBefore(cellStart)) {
+            const { color, bgColor } = this.lifecycleFieldMetadata[phase] || {}
+            style = !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor};`
+          } else if (startDate.isBetween(cellStart, cellEnd)) {
             const { color, bgColor } = this.lifecycleFieldMetadata[phase] || {}
             style = !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor};`
             return false
           }
           return true
         })
-        if (style) return style
+        return style
+      } else {
+        const legend = this.applicationViewIndex[id] || {}
+        const { color, bgColor } = legend
+        return !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor};`
       }
-      const legend = this.applicationViewIndex[id] || {}
-      const { color, bgColor } = legend
-      return !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor};`
     }
   },
   computed: {
@@ -99,5 +108,5 @@ export default {
 
 <style lang="stylus" scoped>
 .transition-background
-  transition background 0.3s ease-in-out
+  transition background 0.2s ease-in-out
 </style>
