@@ -105,7 +105,7 @@ export const fetchViewOptions = async ({ commit, state }, factSheetType) => {
   if (viewOptions.length) commit('setViewKey', { factSheetType, viewKey: viewOptions[0].key })
 }
 
-export const fetchFactSheetTypeView = async ({ commit, state }, factSheetType) => {
+export const fetchFactSheetTypeView = async ({ commit, state, dispatch }, factSheetType) => {
   let { dataset, viewKey } = state
   viewKey = viewKey[factSheetType]
   if (typeof viewKey === 'undefined' || viewKey === null) {
@@ -135,18 +135,22 @@ export const fetchFactSheetTypeView = async ({ commit, state }, factSheetType) =
     query($filter:FilterInput){
       op:allFactSheets(filter:$filter) {
         view(key:"${viewKey}") {
+          viewInfos { key label type}
           mapping{fsId legendId}
-          legendItems{id bgColor color transparency}
+          legendItems{id bgColor color transparency value}
         }
       }
     }
   `
   const variables = { filter: { facetFilters: [{ facetKey: 'FactSheetTypes', keys: [factSheetType] }], ids } }
-  const { viewIndex } = await lx.executeGraphQL(query, variables)
+  const { viewIndex, legendIndex } = await lx.executeGraphQL(query, variables)
     .then(({ op }) => {
       let { mapping, legendItems } = op.view
       const viewIndex = mapping.reduce((accumulator, { fsId, legendId }) => ({ ...accumulator, [fsId]: op.view.legendItems[legendId + 1] }), {})
-      return { viewIndex, legendItems }
+      const legendIndex = legendItems.reduce((accumulator, legendItem) => ({ ...accumulator, [legendItem.value]: legendItem }), {})
+      return { viewIndex, legendIndex }
     })
+
   commit('setViewIndex', { factSheetType, viewIndex })
+  commit('setLegendIndex', { factSheetType, viewKey, legendIndex })
 }

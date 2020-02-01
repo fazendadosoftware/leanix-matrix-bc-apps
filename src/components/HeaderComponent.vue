@@ -1,10 +1,15 @@
 <template>
   <div class="flex items-center mr-3 mt-2 mb-6">
-    <div>
-      <view-option-selector factSheetType="Application"/>
-      <view-option-selector factSheetType="BusinessCapability"/>
+    <div class="flex-1 flex flex-col mr-8">
+      <div class="flex items-center mb-2">
+        <view-option-selector class="w-1/3" factSheetType="Application"/>
+        <view-legend factSheetType="Application"/>
+      </div>
+      <div class="flex items-center">
+        <view-option-selector class="w-1/3" factSheetType="BusinessCapability"/>
+        <view-legend factSheetType="BusinessCapability"/>
+      </div>
     </div>
-    <div class="flex-1"/>
     <leanix-button
       class="mr-1 rotate-icon"
       :label="`${!showQuarters ? 'Expand' : 'Collapse'} quarters`"
@@ -23,8 +28,9 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import ViewOptionSelector from '@/components/ViewOptionSelector'
 import LeanixButton from '@/components/LeanixButton'
+import ViewLegend from '@/components/ViewLegend'
 export default {
-  components: { ViewOptionSelector, LeanixButton },
+  components: { ViewOptionSelector, LeanixButton, ViewLegend },
   methods: {
     ...mapActions(['fetchDataset']),
     ...mapMutations(['setShowQuarters']),

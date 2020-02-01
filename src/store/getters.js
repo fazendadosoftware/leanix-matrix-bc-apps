@@ -18,6 +18,8 @@ export const getViewIndex = state => factSheetType => state.viewIndex[factSheetT
 export const getViewOptions = state => factSheetType => state.viewOptions[factSheetType] || []
 export const getViewKey = state => factSheetType => state.viewKey[factSheetType]
 
+export const getLegendIndex = state => factSheetType => state.legendIndex[factSheetType] || {}
+
 export const columns = state => {
   const { yearCount, startYear, showQuarters, quarterLabels } = state
   const columns = [...Array(yearCount).keys()]

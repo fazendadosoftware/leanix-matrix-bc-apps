@@ -12,3 +12,5 @@ export const loadingDatasetDone = state => state.loadingDataset--
 export const setViewOptions = (state, { factSheetType, viewOptions }) => Vue.set(state.viewOptions, factSheetType, viewOptions)
 export const setViewKey = (state, { factSheetType, viewKey }) => Vue.set(state.viewKey, factSheetType, viewKey)
 export const setViewIndex = (state, { factSheetType, viewIndex }) => Vue.set(state.viewIndex, factSheetType, viewIndex)
+
+export const setLegendIndex = (state, { factSheetType, viewKey, legendIndex }) => Vue.set(state.legendIndex, factSheetType, legendIndex)

@@ -12,5 +12,6 @@ export default {
 
   viewOptions: {},
   viewKey: {},
-  viewIndex: {}
+  viewIndex: {},
+  legendIndex: {}
 }
