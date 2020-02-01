@@ -2,7 +2,14 @@
   font-family: 'Axiforma';
   font-style: normal;
   font-weight: normal;
-  src: local('Axiforma'), url('../font/AxiformaRegular.woff') format('woff');
+  src: url('~@/assets/font/AxiformaRegular.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Axiforma';
+	font-weight: bold;
+	font-style: normal;
+	src: url('~@/assets/font/AxiformaBold.woff') format('woff');
 }
 
 .grid {

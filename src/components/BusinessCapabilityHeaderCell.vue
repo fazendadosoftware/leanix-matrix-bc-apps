@@ -1,5 +1,7 @@
 <template>
-  <div class="sticky left-0 flex border bg-white p-1">
+  <div
+    class="sticky left-0 flex items-center bg-darkslategray text-white font-bold text-md p-1 rounded border"
+    :style="`${cell.style};${style}`">
     <div
       v-if="Array.isArray(cell.children) && cell.children.length"
       class="cursor-pointer px-2" @click="toggleExpandedBusinessCapability">
@@ -19,9 +21,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['expandedBusinessCapabilities']),
+    ...mapGetters(['expandedBusinessCapabilities', 'businessCapabilityViewIndex']),
     isExpanded () {
       return this.expandedBusinessCapabilities.indexOf(this.cell.id) > -1
+    },
+    style () {
+      const { id } = this.cell
+      const legend = this.businessCapabilityViewIndex[id] || {}
+      const { color, bgColor } = legend
+      const style = !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor};`
+      return style
     }
   },
   methods: {

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="overflow-y-hidden">
+  <div id="app">
     <header-component/>
     <grid-component ref="grid" :style="`max-height: ${gridMaxHeight}px`"/>
   </div>
@@ -41,6 +41,16 @@ export default {
 <style lang="stylus">
 body
   margin 0
+  &::-webkit-scrollbar-track
+    -webkit-box-shadow inset 0 0 6px rgba(0,0,0,0.3)
+    background-color grey-100
+  &::-webkit-scrollbar
+    width 0.5em
+    height 0.5em
+    background-color: transparent
+  &::-webkit-scrollbar-thumb
+    background-color #a9a9a9
+    outline 1px solid #708090
 
 #app
   font-family Axiforma, "Helvetica Neue", Helvetica, Arial, sans-serif
@@ -59,4 +69,5 @@ body
   &::-webkit-scrollbar-thumb
     background-color #a9a9a9
     outline 1px solid #708090
+
 </style>
