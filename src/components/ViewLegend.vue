@@ -38,6 +38,18 @@ export default {
     legendItems () {
       const legendItems = Object.values(this.getLegendIndex(this.factSheetType))
         .filter(({ value }) => value !== 'HIDDEN_IN_MATRIX')
+        .map(item => {
+          const { key, type } = this.viewOption
+          let { value } = item
+          if (type === 'FIELD') {
+            value = this.$lx.translateFieldValue(this.factSheetType, key, value)
+          } else if (type === 'FIELD_TARGET_FS') {
+            // eslint-disable-next-line
+            const [relName, targetFsType, field] = key.split('.')
+            value = this.$lx.translateFieldValue(targetFsType, field, value)
+          }
+          return { ...item, value }
+        })
         .sort((itemA, itemB) => itemA.id - itemB.id)
       return legendItems
     }
