@@ -84,7 +84,6 @@ export const fetchDataset = async ({ commit }) => {
     .reduce((accumulator, businessCapability) => {
       const { id, relatedApplications, children } = businessCapability
       const parentRelatedApplications = relatedApplications.reduce((accumulator, application) => ({ ...accumulator, [application.id]: application }), {})
-      console.log('PARENT RELATED', parentRelatedApplications)
       const parentId = id
       children.forEach(child => {
         const { id, relatedApplications } = child
