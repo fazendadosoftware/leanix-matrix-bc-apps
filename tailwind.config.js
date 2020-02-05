@@ -1,6 +1,15 @@
 module.exports = {
   theme: {
     extend: {
+      truncate: {
+        lines: {
+          2: '2',
+          3: '3',
+          4: '4',
+          5: '5',
+          8: '8'
+        }
+      },
       colors: {
         dodgerblue: '#0e90d2',
         darkslategray: '#333333',
@@ -18,5 +27,7 @@ module.exports = {
   variants: {
     margin: ['responsive', 'last', 'hover', 'focus']
   },
-  plugins: []
+  plugins: [
+    require('./src/assets/js/tailwindcss-truncate-multiline')()
+  ]
 }

@@ -2,11 +2,11 @@
   <div class="border rounded bg-whitesmoke p-1">
     <div
       v-for="application in relatedApplications" :key="application.id"
-      class="border bg-white p-1 rounded mb-1 last:mb-0 transition-background flex flex-col items-center leading-tight hover:underline"
+      class="border bg-white p-1 rounded mb-1 last:mb-0 transition-background flex items-center justify-center leading-tight hover:underline"
       :style="getComputedStyle(application)">
-      <span class="cursor-pointer" @click="openFactSheetPreview(application)">
+      <div class="cursor-pointer truncate-4-lines text-center" @click="openFactSheetPreview(application)">
         {{application.name}}
-      </span>
+      </div>
     </div>
   </div>
 </template>

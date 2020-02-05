@@ -6,7 +6,7 @@
       class="flex items-center mr-8"
      >
       <div class="circle mr-2" :style="getComputedStyle(legendItem)"/>
-      {{legendItem.value === '__missing__' ? 'N/A' : legendItem.value}}
+      <div>{{legendItem.value === '__missing__' ? 'N/A' : legendItem.value}}</div>
     </div>
   </div>
 </template>

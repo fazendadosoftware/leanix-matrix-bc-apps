@@ -7,7 +7,7 @@
       class="cursor-pointer px-2" @click="toggleExpandedBusinessCapability">
       <font-awesome-icon class="transition-transform" icon="chevron-right" :class="isExpanded ? 'rotate-90' : ''"/>
     </div>
-    {{cell.name}}
+    <div class="truncate-4-lines">{{cell.name}}</div>
   </div>
 </template>
 
