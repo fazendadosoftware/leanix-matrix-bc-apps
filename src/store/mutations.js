@@ -1,6 +1,7 @@
 import Vue from 'vue'
 
 export const setReportSeup = (state, reportSetup) => { state.reportSetup = reportSetup }
+export const setWorkspaceIsCustomized = state => { state.workspaceIsCustomized = true }
 export const setBaseUrl = (state, baseUrl) => { state.baseUrl = baseUrl }
 export const setDataset = (state, dataset) => { state.dataset = dataset; state.expandedBusinessCapabilities = [] }
 export const setBusinessCapabilityIndex = (state, businessCapabilityIndex) => { state.businessCapabilityIndex = businessCapabilityIndex }

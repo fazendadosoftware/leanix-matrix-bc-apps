@@ -4,7 +4,10 @@
       v-for="application in relatedApplications" :key="application.id"
       class="border bg-white p-1 rounded mb-1 last:mb-0 transition-background flex items-center justify-center leading-tight hover:underline"
       :style="getComputedStyle(application)">
-      <div class="cursor-pointer truncate-4-lines text-center" @click="openFactSheetPreview(application)">
+      <div
+        class="cursor-pointer truncate-4-lines text-center tooltip-target"
+        @click="openFactSheetPreview(application)"
+        v-tooltip="getTooltipOptions(application)">
         {{application.name}}
       </div>
     </div>
@@ -54,10 +57,44 @@ export default {
         const { color, bgColor } = legend
         return !color && !bgColor ? undefined : `color: ${color}; background-color: ${bgColor};`
       }
+    },
+    getTooltipOptions (application) {
+      const { hostingModel, cloudProvider, cloudService } = application
+      const translatedHostingModel = this.workspaceIsCustomized
+        ? this.$lx.translateFieldValue('Application', 'hostingModel', hostingModel)
+        : hostingModel
+      const translatedCloudProvider = this.workspaceIsCustomized
+        ? this.$lx.translateFieldValue('Application', 'cloudProvider', cloudProvider)
+        : cloudProvider
+      const translatedCloudService = this.workspaceIsCustomized
+        ? this.$lx.translateFieldValue('Application', 'cloudService', cloudService)
+        : cloudService
+
+      const cloudFragment = hostingModel === 'cloud'
+        ? `
+          <div>${this.$lx.translateField('Application', 'cloudProvider')}: ${translatedCloudProvider || 'N/A'}</div>
+          <div>${this.$lx.translateField('Application', 'cloudService')}: ${translatedCloudService || 'N/A'}</div>
+          `
+        : ''
+
+      const htmlContent = this.workspaceIsCustomized
+        ? `<div class="p-1 rounded bg-darkslategray text-white text-xs">
+              <div>${this.$lx.translateField('Application', 'hostingModel')}: ${translatedHostingModel || 'N/A'}</div>
+              ${cloudFragment}
+          </div>`
+        : `<div class="p-1 rounded bg-darkslategray text-white text-xs">Missing workspace customization</div>`
+      const options = {
+        delay: { show: 400, hide: 200 },
+        offset: 10,
+        html: true,
+        placement: 'top',
+        content: htmlContent
+      }
+      return options
     }
   },
   computed: {
-    ...mapGetters(['businessCapabilityIndex', 'applicationViewIndex', 'getViewKey']),
+    ...mapGetters(['businessCapabilityIndex', 'applicationViewIndex', 'getViewKey', 'workspaceIsCustomized']),
     lifecycleFieldMetadata () {
       return (this.$lx.getFactSheetFieldMetaData('Application', 'lifecycle') || {}).values
     },

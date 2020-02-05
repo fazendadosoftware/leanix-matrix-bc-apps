@@ -1,5 +1,6 @@
 export const loadingDataset = state => state.loadingDataset > 0
 export const reportSetup = state => state.reportSetup
+export const workspaceIsCustomized = state => state.workspaceIsCustomized
 export const years = state => [...Array(state.yearCount).keys()].map(offset => state.startYear + offset)
 export const showQuarters = state => state.showQuarters
 export const dataset = state => state.dataset

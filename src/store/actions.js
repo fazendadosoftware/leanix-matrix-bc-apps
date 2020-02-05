@@ -1,13 +1,25 @@
 import '@leanix/reporting'
 
-export const initializeReport = ({ commit }) => {
-  lx.init()
+export const initializeReport = ({ commit, state }) => {
+  const { customFields } = state
+  return lx.init()
     .then(async reportSetup => {
       commit('setReportSeup', reportSetup)
       const { settings, savedState = {} } = reportSetup
       // eslint-disable-next-line
       const { customState = {} } = savedState !== null ? savedState : {}
-      const { baseUrl } = settings
+      const { baseUrl, dataModel = {} } = settings
+      const { factSheets } = dataModel
+
+      const isWorkspaceCustomized = Object.entries(customFields)
+        .every(([factSheetType, requiredFields]) => {
+          const { fields = {} } = factSheets[factSheetType] || {}
+          const workspaceFactSheetTypeFields = Object.keys(fields)
+          const allFieldsDefined = requiredFields.every(field => workspaceFactSheetTypeFields.indexOf(field) > -1)
+          return allFieldsDefined
+        })
+      if (!isWorkspaceCustomized) console.warn(`missing required customization fields in workspace data model: ${JSON.stringify(customFields)}`)
+      if (isWorkspaceCustomized) commit('setWorkspaceIsCustomized')
       commit('setBaseUrl', baseUrl)
 
       const reportConfig = {
@@ -32,11 +44,15 @@ export const openFactSheetPreview = ({ state }, factSheet) => {
   lx.openLink(`${state.baseUrl}${uri}`)
 }
 
-export const fetchDataset = async ({ commit }) => {
+export const fetchDataset = async ({ commit, state }) => {
+  let { workspaceIsCustomized, customFields = {} } = state
+  const applicationCustomFields = workspaceIsCustomized
+    ? (customFields.Application || []).join(' ')
+    : ''
   // lx.showSpinner()
   commit('loadingDatasetStart')
   const factSheetFields = `id name type level`
-  const relatedApplications = `...on BusinessCapability {relatedApplications: relBusinessCapabilityToApplication{edges {node {factSheet {${factSheetFields}...on Application{lifecycle{phases{phase startDate}}}}}}}}`
+  const relatedApplications = `...on BusinessCapability {relatedApplications: relBusinessCapabilityToApplication{edges {node {factSheet {${factSheetFields}...on Application{${applicationCustomFields} lifecycle{phases{phase startDate}}}}}}}}`
   const children = `children: relToChild {edges {node {factSheet {${factSheetFields} ${relatedApplications}}}}}`
 
   const query = `

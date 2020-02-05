@@ -1,5 +1,9 @@
 export default {
   reportSetup: {},
+  customFields: {
+    Application: ['hostingModel', 'cloudProvider', 'cloudService']
+  },
+  workspaceIsCustomized: false,
   baseUrl: '',
   startYear: 2019,
   yearCount: 7,
