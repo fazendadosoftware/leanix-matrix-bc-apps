@@ -7,12 +7,12 @@
       class="cursor-pointer px-2" @click="toggleExpandedBusinessCapability">
       <font-awesome-icon class="transition-transform" icon="chevron-right" :class="isExpanded ? 'rotate-90' : ''"/>
     </div>
-    <div class="truncate-4-lines">{{cell.name}}</div>
+    <div class="truncate-4-lines cursor-pointer hover:underline" @click="openFactSheetPreview(cell)">{{cell.name}}</div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   props: {
     cell: {
@@ -34,6 +34,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['openFactSheetPreview']),
     toggleExpandedBusinessCapability () {
       const index = this.expandedBusinessCapabilities.indexOf(this.cell.id)
       if (index === -1) this.expandedBusinessCapabilities.push(this.cell.id)
