@@ -83,12 +83,15 @@ export const fetchDataset = async ({ commit }) => {
   const bcIndex = dataset
     .reduce((accumulator, businessCapability) => {
       const { id, relatedApplications, children } = businessCapability
+      const parentRelatedApplications = relatedApplications.reduce((accumulator, application) => ({ ...accumulator, [application.id]: application }), {})
+      console.log('PARENT RELATED', parentRelatedApplications)
       const parentId = id
-      accumulator[id] = { id, relatedApplications }
       children.forEach(child => {
         const { id, relatedApplications } = child
+        relatedApplications.forEach(application => { parentRelatedApplications[application.id] = application })
         accumulator[id] = { id, relatedApplications, parentId }
       })
+      accumulator[id] = { id, relatedApplications: Object.values(parentRelatedApplications) }
       return accumulator
     }, {})
   commit('setDataset', dataset)
