@@ -1,11 +1,11 @@
 <template>
   <div
-    class="leanix-btn inline-block cursor-pointer bg-whitesmoke text-darkslategray border border-whitesmoke hover:bg-silver rounded"
+    class="leanix-btn inline-block cursor-pointer bg-whitesmoke text-darkslategray border border-whitesmoke hover:bg-silver rounded overflow-y-hidden"
     @click="action(actionArgs)">
     <div v-if="icon" class="inline-block" :class="{ 'mr-1': label }">
       <font-awesome-icon :icon="icon" :spin="spin"/>
     </div>
-    <span v-if="label">{{label}}</span>
+    <span v-if="label" class="break-all">{{label}}</span>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center" style="min-width: 600px">
+  <div class="flex items-center">
     <div
       v-for="legendItem in legendItems"
       :key="legendItem.id"

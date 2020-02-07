@@ -2,12 +2,12 @@
   <div class="flex items-center mr-3 mt-2 mb-6">
     <div class="flex-1 flex flex-col mr-8">
       <div class="flex items-center mb-2">
-        <view-option-selector class="w-1/3" factSheetType="Application"/>
-        <view-legend factSheetType="Application"/>
+        <view-option-selector class="w-1/5" style="min-width: 300px" factSheetType="Application"/>
+        <view-legend factSheetType="Application" class="invisible xl:visible"/>
       </div>
       <div class="flex items-center">
-        <view-option-selector class="w-1/3" factSheetType="BusinessCapability"/>
-        <view-legend factSheetType="BusinessCapability"/>
+        <view-option-selector class="w-1/5" style="min-width: 300px" factSheetType="BusinessCapability"/>
+        <view-legend factSheetType="BusinessCapability" class="invisible xl:visible"/>
       </div>
     </div>
     <leanix-button
