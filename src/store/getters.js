@@ -33,11 +33,13 @@ export const columns = state => {
   return columns
 }
 export const cells = state => {
-  const { expandedBusinessCapabilities } = state
+  const { expandedBusinessCapabilities, filteredFactSheets } = state
   const bcsDrilledDown = expandedBusinessCapabilities.length > 0
   const _columns = columns(state)
+  const filteredBusinessCapabilities = filteredFactSheets.BusinessCapability || {}
 
   const businessCapabilities = [ ...state.dataset ]
+    .filter(({ id }) => filteredBusinessCapabilities[id])
   if (!businessCapabilities.length) businessCapabilities[0] = false
 
   const cells = businessCapabilities
@@ -97,3 +99,5 @@ export const cells = state => {
     }, [])
   return cells
 }
+
+export const filteredApplications = state => state.filteredFactSheets.Application || {}

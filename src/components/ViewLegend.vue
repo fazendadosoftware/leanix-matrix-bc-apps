@@ -1,9 +1,9 @@
 <template>
-  <div class="flex items-center">
+  <div class="flex items-center" style="min-width: 600px">
     <div
       v-for="legendItem in legendItems"
       :key="legendItem.id"
-      class="flex items-center mr-8"
+      class="flex flex-0 items-center mr-8"
      >
       <div class="circle mr-2" :style="getComputedStyle(legendItem)"/>
       <div>{{legendItem.value === '__missing__' ? 'N/A' : legendItem.value}}</div>

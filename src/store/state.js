@@ -17,5 +17,7 @@ export default {
   viewOptions: {},
   viewKey: {},
   viewIndex: {},
-  legendIndex: {}
+  legendIndex: {},
+  filter: {},
+  filteredFactSheets: {}
 }

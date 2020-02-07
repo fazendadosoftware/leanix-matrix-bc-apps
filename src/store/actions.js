@@ -22,16 +22,22 @@ export const initializeReport = ({ commit, state }) => {
       if (isWorkspaceCustomized) commit('setWorkspaceIsCustomized')
       commit('setBaseUrl', baseUrl)
 
+      const facets = ['BusinessCapability', 'Application']
+        .map((fixedFactSheetType, i) => ({
+          key: i,
+          fixedFactSheetType,
+          facetFiltersChangedCallback: filter => commit('setFilter', { factSheetType: fixedFactSheetType, filter }),
+          callback: dataset => commit('setFilteredFactSheets', {
+            factSheetType: fixedFactSheetType,
+            ids: dataset.reduce((accumulator, { id }) => ({ ...accumulator, [id]: true }), {})
+          })
+        }))
+
       const reportConfig = {
         allowEditing: false,
         allowTableView: false,
         reportViewFactSheetType: 'Application',
-        facets: [
-          {
-            key: 1,
-            fixedFactSheetType: 'Application'
-          }
-        ]
+        facets
       }
       console.debug(`reportSetup`, reportSetup)
       lx.ready(reportConfig)

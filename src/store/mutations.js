@@ -15,3 +15,6 @@ export const setViewKey = (state, { factSheetType, viewKey }) => Vue.set(state.v
 export const setViewIndex = (state, { factSheetType, viewIndex }) => Vue.set(state.viewIndex, factSheetType, viewIndex)
 
 export const setLegendIndex = (state, { factSheetType, viewKey, legendIndex }) => Vue.set(state.legendIndex, factSheetType, legendIndex)
+
+export const setFilter = (state, { factSheetType, filter }) => Vue.set(state.filter, factSheetType, filter)
+export const setFilteredFactSheets = (state, { factSheetType, ids }) => Vue.set(state.filteredFactSheets, factSheetType, ids)

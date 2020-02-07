@@ -94,7 +94,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['businessCapabilityIndex', 'applicationViewIndex', 'getViewKey', 'workspaceIsCustomized']),
+    ...mapGetters(['businessCapabilityIndex', 'applicationViewIndex', 'getViewKey', 'workspaceIsCustomized', 'filteredApplications']),
     lifecycleFieldMetadata () {
       return (this.$lx.getFactSheetFieldMetaData('Application', 'lifecycle') || {}).values
     },
@@ -118,7 +118,9 @@ export default {
           }, relatedApplicationsIndex)
         relatedApplications = Object.values(relatedApplicationsIndex)
       }
+
       relatedApplications = relatedApplications
+        .filter(({ id }) => this.filteredApplications[id])
         .filter(({ lifecycle }) => {
           if (lifecycle !== null) {
             const { phases = [] } = lifecycle
