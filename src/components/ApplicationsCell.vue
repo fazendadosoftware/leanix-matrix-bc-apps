@@ -1,16 +1,18 @@
 <template>
   <div class="border rounded bg-whitesmoke p-1">
-    <div
-      v-for="application in relatedApplications" :key="application.id"
+    <div v-for="application in relatedApplications" :key="application.id"
       class="border bg-white p-1 rounded mb-1 last:mb-0 transition-background flex items-center justify-center leading-tight hover:underline"
+      :class="{invisible: application.isObsolete}"
       :style="getComputedStyle(application)">
       <div
         class="cursor-pointer truncate-4-lines text-center tooltip-target"
+        :class="{ 'bg-red-400': application.isObsolete }"
         @click="openFactSheetPreview(application)"
         v-tooltip="getTooltipOptions(application)">
         {{application.name}}
       </div>
     </div>
+
   </div>
 </template>
 
@@ -94,7 +96,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['businessCapabilityIndex', 'applicationViewIndex', 'getViewKey', 'workspaceIsCustomized', 'filteredApplications']),
+    ...mapGetters(['businessCapabilityIndex', 'applicationViewIndex', 'getViewKey', 'workspaceIsCustomized', 'filteredApplications', 'columns']),
     lifecycleFieldMetadata () {
       return (this.$lx.getFactSheetFieldMetaData('Application', 'lifecycle') || {}).values
     },
@@ -121,19 +123,49 @@ export default {
 
       relatedApplications = relatedApplications
         .filter(({ id }) => this.filteredApplications[id])
+        // Filter applications which are already obsolete before first column
         .filter(({ lifecycle }) => {
           if (lifecycle !== null) {
             const { phases = [] } = lifecycle
             if (phases.length) {
               const { phase, startDate } = phases[phases.length - 1]
               if (phase === 'endOfLife') {
+                const firstColumn = this.columns[0] || {}
+                const firstYear = firstColumn.year
+                const firstQuarter = firstColumn.quarter
                 const t = moment(startDate)
-                const applicationObsolete = (year > t.year()) || (year === t.year() && quarter !== null && quarter > t.quarter())
+                const applicationObsolete = (firstYear > t.year()) || (firstYear === t.year() && firstQuarter !== null && firstQuarter > t.quarter())
                 return !applicationObsolete
               }
             }
           }
           return true
+        })
+        // Map applications that get obsolete during the cell period
+        .map(application => {
+          const { lifecycle } = application
+          let isObsolete = false
+          if (lifecycle !== null) {
+            const { phases = [] } = lifecycle
+            if (phases.length) {
+              const { phase, startDate } = phases[phases.length - 1]
+              if (phase === 'endOfLife') {
+                const t = moment(startDate)
+                isObsolete = (year > t.year()) || (year === t.year() && quarter !== null && quarter > t.quarter())
+              }
+            }
+          }
+          return { ...application, isObsolete }
+        })
+        // sort related applications alphabetically
+        .sort((applicationA, applicationB) => {
+          const applicationAName = applicationA.name.toUpperCase()
+          const applicationBName = applicationB.name.toUpperCase()
+          return (applicationAName < applicationBName)
+            ? -1
+            : (applicationAName > applicationBName)
+              ? 1
+              : 0
         })
       return relatedApplications
     },
