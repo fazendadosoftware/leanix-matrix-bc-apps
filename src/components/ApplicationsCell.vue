@@ -106,7 +106,9 @@ export default {
     relatedApplications () {
       const { businessCapabilityId, year, quarter } = this.cell
       const indexEntry = this.businessCapabilityIndex[businessCapabilityId] || {}
-      let { relatedApplications = [], parentId } = indexEntry
+      let { relatedApplications = [], childRelatedApplications = [], parentId } = indexEntry
+      relatedApplications = Object.values([...relatedApplications, ...childRelatedApplications]
+        .reduce((accumulator, application) => ({ ...accumulator, [application.id]: application }), {}))
       if (parentId) {
         let relatedApplicationsIndex = relatedApplications
           .reduce((accumulator, application) => ({ ...accumulator, [application.id]: application }), {})
